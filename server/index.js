@@ -23,6 +23,12 @@ app.use(cookieParser());
 
 //ROUTES
 
+app.get("/", (req, res) => {
+  res.json({
+    hello: "DEPLOYED!!!!",
+  });
+});
+
 //AUTH
 app.get("/api/user/auth", auth, (req, res) => {
   res.status(200).json({
