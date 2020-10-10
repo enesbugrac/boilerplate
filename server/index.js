@@ -30,7 +30,7 @@ app.get("/", (req, res) => {
 });
 
 //AUTH
-app.get("/api/user/auth", auth, (req, res) => {
+app.get("/api/users/auth", auth, (req, res) => {
   res.status(200).json({
     _id: req.user._id,
     isAuth: true,
@@ -46,11 +46,11 @@ app.post("/api/users/register", (req, res) => {
 
   user
     .save()
-    .then(() => res.status(200).json(user))
-    .catch((err) => res.status(400).json(`Unable to add user. Error: ${err}.`));
+    .then((user) => res.status(200).json({ userData: user, success: true }))
+    .catch((err) => res.status(400).json({ success: false, err }));
 });
 //LOGIN
-app.post("/api/user/login", (req, res) => {
+app.post("/api/users/login", (req, res) => {
   //find email
   User.findOne({ email: req.body.email }, (err, user) => {
     if (!user) {
@@ -76,7 +76,7 @@ app.post("/api/user/login", (req, res) => {
   });
 });
 //LOG OUT
-app.get("/api/user/logout", auth, (req, res) => {
+app.get("/api/users/logout", auth, (req, res) => {
   User.findOneAndUpdate({ _id: req.user._id }, { token: "" }, (err, doc) => {
     if (err) return res.json({ success: false, err });
     return res.status(200).send({
